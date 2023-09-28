@@ -1,0 +1,73 @@
+version: '3'
+networks:
+  default:
+    driver: bridge
+services:
+  redis:
+    image: 'redis:latest'
+    ports:
+      - "6789:6789"
+    volumes:
+      - ~/opt/homebrew/bin/redis:/var/lib/redis/data
+    env_file:
+      - .env
+
+  postgres_db:
+    image: 'postgres:14-alpine'
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/opt/homebrew/bin/postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  portfolio_service:
+    image: portfolio_jar
+    ports:
+      - "8090:8090"
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ${M2_HOME}:/root/.m2
+      -
+  user_service:
+    image: user_jar
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ${M2_HOME}:/root/.m2
+
+  transaction_service:
+    image: transaction_jar
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ${M2_HOME}:/root/.m2
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"

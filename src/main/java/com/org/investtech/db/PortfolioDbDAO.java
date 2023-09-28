@@ -43,14 +43,3 @@ public class PortfolioDbDAO {
         }
     }
 }
-/*
-* create stock : insert into stock values(13833536, 'Alienware','d66a193c-d721-4d5d-b11d-1e55aeee76fb', 900, 900, 25);
-* -- purchase--
-*
-* 1. create a transaction:
-* insert into transaction values(74008304, '9cd46b53-aac4-4676-a0d2-01758469bd79',
-* 'e303db29-2f79-4f99-8f4a-67cb85b79ce9', 'd66a193c-d721-4d5d-b11d-1e55aeee76fb', 25, 'BUY');
-*
-* 2. complete purchase
-* insert into stock_count values(36334500, 'e303db29-2f79-4f99-8f4a-67cb85b79ce9', 'd66a193c-d721-4d5d-b11d-1e55aeee76fb', 1);
-* */

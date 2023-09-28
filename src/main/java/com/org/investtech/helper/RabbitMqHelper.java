@@ -3,7 +3,6 @@ package com.org.investtech.helper;
 import com.google.gson.Gson;
 import com.org.investtech.config.RabbitMqConfig;
 import org.example.model.RabbitMqStock;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
