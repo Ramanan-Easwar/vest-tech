@@ -1,20 +1,24 @@
-FROM openjdk:8-jdk-alpine
+# stage 1: install maven, build the jar
 
-RUN apk add --no-cache curl tar bash
-ARG MAVEN_VERSION=3.6.3
-ARG USER_HOME_DIR="/Users/rammohan/"
-RUN mkdir -p /usr/share/maven && \
-curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzC /usr/share/maven --strip-components=1 && \
-ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-ENV MAVEN_HOME /usr/share/maven
-ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-WORKDIR /usr/src/app
-#ENTRYPOINT ["/bin/bash"]
+FROM maven:3.8.5-openjdk-17 AS stage1
+ARG M2_HOME=/Users/ramanan
+VOLUME $M2_HOME/.m2
+RUN mkdir -p /opt/repo/
+WORKDIR /opt/repo/
 
-RUN mkdir -p /usr/src/app
+COPY investtech-commons/pom.xml /opt/repo/
+COPY investtech-portfolio/src/ /opt/repo/src
+RUN mvn clean install
+RUN mvn clean
+RUN rm -rf src pom.xml
 
 
-COPY pom.xml /usr/src/app
-RUN mvn install && rm -rf target
+COPY investtech-portfolio/pom.xml /opt/repo/
+COPY investtech-portfolio/src/ /opt/repo/src
+RUN mvn clean install
 
-COPY src /usr/src/app/src
+#stage 2: install java
+
+FROM amazoncorretto:17-alpine as stage1
+WORKDIR /opt/repo
+COPY --from=stage1 /opt/repo/target/portfolio.jar /opt/repo

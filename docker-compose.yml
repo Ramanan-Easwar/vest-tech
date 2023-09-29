@@ -22,7 +22,7 @@ services:
       - .env
 
   portfolio_service:
-    image: portfolio_jar
+    image: portfolio:live
     ports:
       - "8090:8090"
     env_file:
@@ -36,7 +36,7 @@ services:
       - ${M2_HOME}:/root/.m2
       -
   user_service:
-    image: user_jar
+    image: user:live
     ports:
       - "8080:8080"
     env_file:
@@ -50,7 +50,7 @@ services:
       - ${M2_HOME}:/root/.m2
 
   transaction_service:
-    image: transaction_jar
+    image: transaction:live
     ports:
       - "8081:8081"
     env_file:
