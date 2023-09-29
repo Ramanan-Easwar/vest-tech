@@ -35,7 +35,7 @@ project
 |_ Dockerfile
 
 
-$ docker build --no-cache -t portfolio:live
+$ docker build --no-cache -t portfolio:live .
 
 
 ```
